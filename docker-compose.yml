@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=postgres # Always use postgres as host in Docker environment
+      - NODE_ENV=development
+    volumes:
+      - ./src:/usr/src/app/src
+    restart: unless-stopped
+    # Explicitly set tty and stdin_open to keep container running
+    tty: true
+    stdin_open: true
+  
+  postgres:
+    image: postgres:15
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      - POSTGRES_DB=${DB_NAME:-weatherdb}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
