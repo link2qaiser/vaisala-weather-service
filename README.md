@@ -164,3 +164,6 @@ There is file regarding sample data `sample-data.json`
 There is file regarding Postman collection to validate the endpoints `Weather Service API.postman_collection.json`
 
 
+## Video
+
+[![Watch on YouTube](https://img.youtube.com/vi/HyM3g_7frU8/0.jpg)](https://www.youtube.com/watch?v=HyM3g_7frU8)
