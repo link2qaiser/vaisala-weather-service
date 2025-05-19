@@ -165,5 +165,14 @@ There is file regarding Postman collection to validate the endpoints `Weather Se
 
 
 ## Setup Video
+Watch this short tutorial to see how to setup, configure, and run the Vaisala Weather Service:
+>[▶️ Vaisala Weather Service Setup Video](https://www.youtube.com/watch?v=HyM3g_7frU8)
 
-[![Watch on YouTube](https://img.youtube.com/vi/HyM3g_7frU8/0.jpg)](https://www.youtube.com/watch?v=HyM3g_7frU8)
+
+
+
+
+
+
+
+
