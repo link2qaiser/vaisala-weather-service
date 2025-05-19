@@ -164,3 +164,15 @@ There is file regarding sample data `sample-data.json`
 There is file regarding Postman collection to validate the endpoints `Weather Service API.postman_collection.json`
 
 
+## Setup Video
+Watch this short tutorial to see how to setup, configure, and run the Vaisala Weather Service:
+>[▶️ Vaisala Weather Service Setup Video](https://www.youtube.com/watch?v=HyM3g_7frU8)
+
+
+
+
+
+
+
+
+
