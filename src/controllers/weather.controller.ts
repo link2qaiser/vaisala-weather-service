@@ -31,7 +31,7 @@ export const getWeatherByCoordinates = async (req: Request, res: Response) => {
   try {
     const lat = parseFloat(req.query.lat as string);
     const lon = parseFloat(req.query.lon as string);
-    const unit = (req.query.unit as 'c' | 'f') || 'c';
+    const unit = ((req.query.unit as string)?.toLowerCase() as 'c' | 'f') || 'c';
 
     if (isNaN(lat) || isNaN(lon)) {
       return res.status(400).json({ error: 'Invalid coordinates' });

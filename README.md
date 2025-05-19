@@ -1,188 +1,148 @@
-# Weather Service
+# Vaisala Weather Service
 
-A RESTful service for uploading and retrieving weather data with geospatial support.
+A simple RESTful API to upload and retrieve weather data using PostgreSQL with geospatial support.
 
-## Features
+## 🚀 Features
 
-- Upload weather data in JSON format
-- Retrieve weather data based on location coordinates (latitude/longitude)
-- Find the closest weather data point to a given location
-- Convert temperature between Celsius and Fahrenheit
-- PostgreSQL with PostGIS for efficient geospatial queries
-- Docker deployment ready
+- Upload weather data via JSON file
+- Retrieve the closest weather entry based on lat/lon coordinates
+- Convert temperature from Celsius to Fahrenheit (optional)
+- PostgreSQL extensions (`cube`, `earthdistance`) for location distance queries
+- Docker-based deployment
 
-## Tech Stack
+## 🛠 Tech Stack
 
 - TypeScript
-- Node.js (>= 21)
+- Node.js (≥ 21)
 - Express.js
-- PostgreSQL with PostGIS extension
+- PostgreSQL (with `cube` and `earthdistance`)
 - Docker & Docker Compose
 
-## Getting Started
+---
 
-### Prerequisites
+## 📦 Getting Started
 
-- Docker and Docker Compose
-- Node.js >= 21 (for local development)
+### 🔧 Prerequisites
 
-### Installation and Setup
+- Docker + Docker Compose
+- Node.js ≥ 21 (for local development)
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/link2qaiser/vaisala-weather-service
-   cd vaisala-weather-service
-   ```
+### 📥 Installation and Setup
 
-2. Create a `.env` file based on the example:
-   ```bash
-   cp .env.example .env
-   ```
+1. Clone the repository:
 
-3. Start the application using Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
+```bash
+git clone https://github.com/link2qaiser/vaisala-weather-service
+cd vaisala-weather-service
+```
 
-   This will:
-   - Build the Docker image
-   - Start the PostgreSQL database
-   - Run the database migrations
-   - Start the application on port 3000
+2. Create a `.env` file:
 
-### Environment Variables
+```bash
+cp .env.example .env
+```
 
-The application uses the following environment variables:
+3. Start the services with Docker:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| PORT | Port number for the application | 3000 |
-| NODE_ENV | Environment (development, production) | development |
-| DB_HOST | Database host | postgres |
-| DB_PORT | Database port | 5432 |
-| DB_USER | Database username | postgres |
-| DB_PASSWORD | Database password | postgres |
-| DB_NAME | Database name | weather_db |
-| MAX_UPLOAD_SIZE | Maximum file upload size | 10mb |
-| DEFAULT_MAX_DISTANCE | Default maximum distance for weather data queries (meters) | 100000 |
+```bash
+docker compose up -d
+```
 
-### Local Development
+This will:
+- Build the app image
+- Start PostgreSQL
+- Run database migrations
+- Launch the API on port `3000`
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
 
-2. Start a PostgreSQL instance (with PostGIS):
-   ```bash
-   docker-compose up -d postgres
-   ```
+## 🔧 Local Development
 
-3. Run the migrations:
-   ```bash
-   npm run migration:up
-   ```
+1. Install Node.js dependencies:
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm install
+```
 
-## API Documentation
+2. Start only the database if needed:
 
-### Upload Weather Data
+```bash
+docker compose up -d postgres
+```
 
-Upload weather data in JSON format.
+3. Run the migration script:
 
-- **URL**: `/api/weather/upload`
-- **Method**: `POST`
+```bash
+docker compose exec app npm run db:migrate
+```
+
+---
+
+## 📡 API Endpoints
+
+### ✅ Health Check
+
+- **GET** `/health`
+
+---
+
+### 🌤️ Upload Weather Data
+
+- **POST** `/weather/upload`
 - **Content-Type**: `multipart/form-data`
-- **Parameter**: `file` (JSON file)
+- **Form field**: `file` (JSON)
 
-**Example Request**:
+**Example curl**:
+
 ```bash
-curl -X POST -H "Content-Type: multipart/form-data" -F "file=@weather_data.json" http://localhost:3000/api/weather/upload
+curl -X POST http://localhost:3000/api/weather/upload \
+  -F "file=@weather-sample.json"
 ```
 
-**Example JSON Format**:
+**JSON Format**:
+
 ```json
-{
-  "data": [
-    {
-      "locationName": "New York City",
-      "location": {
-        "latitude": 40.7128,
-        "longitude": -74.0060
-      },
-      "temperature": 22.5,
-      "humidity": 65,
-      "windSpeed": 10.2,
-      "precipitation": 0,
-      "recordedAt": "2023-01-01T12:00:00Z"
-    }
-  ]
-}
+[
+  {
+    "city": "Helsinki",
+    "lat": "60.1676",
+    "lon": "24.9421",
+    "temp": "7.0",
+    "humidity": "40.5"
+  }
+]
 ```
 
-**Example Success Response**:
-```json
-{
-  "success": true,
-  "message": "Successfully processed 1 weather data points",
-  "count": 1
-}
-```
+---
 
-### Get Weather Data by Location
+### 🌍 Get Closest Weather by Coordinates
 
-Retrieve weather data by location coordinates.
-
-- **URL**: `/api/weather`
-- **Method**: `GET`
+- **GET** `/weather`
 - **Query Parameters**:
-  - `lat` (required): Latitude (-90 to 90)
-  - `lon` (required): Longitude (-180 to 180)
-  - `unit` (optional): Temperature unit ('C' or 'F', default: 'C')
-  - `maxDistance` (optional): Maximum distance in meters (default: 100000)
+  - `lat` (required): Latitude
+  - `lon` (required): Longitude
+  - `unit` (optional): `c` or `f` (Celsius or Fahrenheit, default: `c`)
 
-**Example Request**:
+**Example**:
+
 ```bash
-curl -X GET "http://localhost:3000/api/weather?lat=40.7128&lon=-74.0060&unit=F"
+curl "http://localhost:3000/api/weather?lat=60.1676&lon=24.9421&unit=f"
 ```
 
-**Example Success Response**:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "locationName": "New York City",
-    "location": {
-      "latitude": 40.7128,
-      "longitude": -74.0060
-    },
-    "temperature": 72.5,
-    "humidity": 65,
-    "windSpeed": 10.2,
-    "precipitation": 0,
-    "recordedAt": "2023-01-01T12:00:00Z",
-    "createdAt": "2023-01-01T12:05:00Z",
-    "distance": 0
-  },
-  "unit": "F"
-}
-```
+---
 
-## Database Schema
+## 🗃️ Database Schema
 
-The main table `weather_data` has the following structure:
+The `weather` table contains:
 
-- `id`: Serial primary key
-- `location_name`: Name of the location (varchar)
-- `location`: Geographic point (PostGIS geography type)
-- `temperature`: Temperature in Celsius (decimal)
-- `humidity`: Humidity in percentage (decimal, optional)
-- `wind_speed`: Wind speed in m/s (decimal, optional)
-- `precipitation`: Precipitation in mm (decimal, optional)
-- `recorded_at`: Time when the weather data was recorded (timestamp with timezone)
-- `created_at`: Time when the record was created (timestamp with timezone)
+| Column     | Type                  | Description               |
+|------------|-----------------------|---------------------------|
+| id         | SERIAL PRIMARY KEY    | Unique record ID          |
+| city       | VARCHAR(255)          | City name                 |
+| lat        | FLOAT                 | Latitude                  |
+| lon        | FLOAT                 | Longitude                 |
+| temp       | FLOAT                 | Temperature (°C)          |
+| humidity   | FLOAT                 | Humidity (%)              |
+| created_at | TIMESTAMPTZ           | Record creation time      |
+
+---
+
