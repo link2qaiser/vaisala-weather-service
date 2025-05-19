@@ -48,17 +48,19 @@ cp .env.example .env
 docker compose up -d
 ```
 
+4. Run Migration to create schema
+
+```bash
+docker compose exec app npm run db:migrate
+```
+
 This will:
 - Build the app image
 - Start PostgreSQL
 - Run database migrations
 - Launch the API on port `3000`
 
-4. Run Migration to create schema
 
-```bash
-docker compose exec app npm run db:migrate
-```
 
 ## 🔧 Local Development
 
