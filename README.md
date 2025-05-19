@@ -161,6 +161,6 @@ There is file regarding sample data `sample-data.json`
 
 ## Postman Collection
 
-There is file regarding Postman collection to validate the endpoints `sample-data.json`
+There is file regarding Postman collection to validate the endpoints `Weather Service API.postman_collection.json`
 
 
