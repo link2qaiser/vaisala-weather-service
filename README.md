@@ -146,3 +146,19 @@ The `weather` table contains:
 
 ---
 
+---
+
+## Sample Data File
+
+There is file regarding sample data `sample-data.json`
+
+---
+
+---
+
+## Postman Collection
+
+There is file regarding Postman collection to validate the endpoints `sample-data.json`
+
+---
+
