@@ -1,40 +1,164 @@
-# Vaisala Weather Data Service
+# Vaisala Weather Service
 
-A TypeScript/Node.js backend service providing weather data based on locations.
+A simple RESTful API to upload and retrieve weather data using PostgreSQL with geospatial support.
 
-## Project Structure
+## 🚀 Features
 
+- Upload weather data via JSON file
+- Retrieve the closest weather entry based on lat/lon coordinates
+- Convert temperature from Celsius to Fahrenheit (optional)
+- PostgreSQL extensions (`cube`, `earthdistance`) for location distance queries
+- Docker-based deployment
+
+## 🛠 Tech Stack
+
+- TypeScript
+- Node.js (≥ 21)
+- Express.js
+- PostgreSQL (with `cube` and `earthdistance`)
+- Docker & Docker Compose
+
+---
+
+## 📦 Getting Started
+
+### 🔧 Prerequisites
+
+- Docker + Docker Compose
+- Node.js ≥ 21 (for local development)
+
+### 📥 Installation and Setup
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/link2qaiser/vaisala-weather-service
+cd vaisala-weather-service
 ```
-weather-service/
-├── src/
-│   ├── config/
-│   │   └── db.ts
-│   ├── controllers/
-│   │   └── weatherController.ts
-│   ├── models/
-│   │   └── weatherModel.ts 
-│   ├── routes/
-│   │   └── weatherRoutes.ts
-│   ├── services/
-│   │   └── weatherService.ts
-│   ├── types/
-│   │   └── index.ts
-│   ├── utils/
-│   │   ├── distanceCalculator.ts
-│   │   └── validators.ts
-│   ├── app.ts
-│   └── server.ts
-├── docker-compose.yml
-├── Dockerfile
-├── package.json
-├── tsconfig.json
-├── .env.example
-└── README.md
+
+2. Create a `.env` file:
+
+```bash
+cp .env.example .env
 ```
 
-## Setup Instructions
+3. Start the services with Docker:
 
-### Prerequisites
+```bash
+docker compose up -d
+```
 
-- Node.js (v16 or higher)
-- Docker and Docker Compose
+This will:
+- Build the app image
+- Start PostgreSQL
+- Run database migrations
+- Launch the API on port `3000`
+
+
+## 🔧 Local Development
+
+1. Install Node.js dependencies:
+
+```bash
+npm install
+```
+
+2. Start only the database if needed:
+
+```bash
+docker compose up -d postgres
+```
+
+3. Run the migration script:
+
+```bash
+docker compose exec app npm run db:migrate
+```
+
+---
+
+## 📡 API Endpoints
+
+### ✅ Health Check
+
+- **GET** `/health`
+
+---
+
+### 🌤️ Upload Weather Data
+
+- **POST** `/weather/upload`
+- **Content-Type**: `multipart/form-data`
+- **Form field**: `file` (JSON)
+
+**Example curl**:
+
+```bash
+curl -X POST http://localhost:3000/api/weather/upload \
+  -F "file=@weather-sample.json"
+```
+
+**JSON Format**:
+
+```json
+[
+  {
+    "city": "Helsinki",
+    "lat": "60.1676",
+    "lon": "24.9421",
+    "temp": "7.0",
+    "humidity": "40.5"
+  }
+]
+```
+
+---
+
+### 🌍 Get Closest Weather by Coordinates
+
+- **GET** `/weather`
+- **Query Parameters**:
+  - `lat` (required): Latitude
+  - `lon` (required): Longitude
+  - `unit` (optional): `c` or `f` (Celsius or Fahrenheit, default: `c`)
+
+**Example**:
+
+```bash
+curl "http://localhost:3000/api/weather?lat=60.1676&lon=24.9421&unit=f"
+```
+
+---
+
+## 🗃️ Database Schema
+
+The `weather` table contains:
+
+| Column     | Type                  | Description               |
+|------------|-----------------------|---------------------------|
+| id         | SERIAL PRIMARY KEY    | Unique record ID          |
+| city       | VARCHAR(255)          | City name                 |
+| lat        | FLOAT                 | Latitude                  |
+| lon        | FLOAT                 | Longitude                 |
+| temp       | FLOAT                 | Temperature (°C)          |
+| humidity   | FLOAT                 | Humidity (%)              |
+| created_at | TIMESTAMPTZ           | Record creation time      |
+
+---
+
+---
+
+## Sample Data File
+
+There is file regarding sample data `sample-data.json`
+
+---
+
+---
+
+## Postman Collection
+
+There is file regarding Postman collection to validate the endpoints `sample-data.json`
+
+---
+

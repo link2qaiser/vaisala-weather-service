@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "7128b775-9e87-493a-819f-917753b5d897",
+		"name": "Weather Service API",
+		"description": "Collection for testing the Weather Service API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "327876"
+	},
+	"item": [
+		{
+			"name": "Upload Weather Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/link2/Downloads/sample-data.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/weather/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"weather",
+						"upload"
+					]
+				},
+				"description": "Uploads weather data from a JSON file. The data should be an array of weather entries with location, temperature, humidity, etc."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Weather by Coordinates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/weather?lat=60.29095271453981&lon=24.871704710660175&unit=f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "60.29095271453981"
+						},
+						{
+							"key": "lon",
+							"value": "24.871704710660175"
+						},
+						{
+							"key": "unit",
+							"value": "f"
+						}
+					]
+				},
+				"description": "Retrieves weather data for the closest station to the given coordinates, with temperature in Celsius."
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"health"
+					]
+				},
+				"description": "Checks if the service is up and running."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
